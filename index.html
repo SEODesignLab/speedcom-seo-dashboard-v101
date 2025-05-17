@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedcom SEO Strategy Dashboard v1.01</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #1d3557;
+            --accent-color: #457b9d;
+            --light-color: #f1faee;
+            --dark-color: #1d3557;
+            --success-color: #2a9d8f;
+            --warning-color: #e9c46a;
+            --danger-color: #e76f51;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .version-info {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .dashboard {
+            margin-top: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .tab-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-item:hover {
+            border-bottom-color: #ccc;
+        }
+        
+        .tab-item.active {
+            border-bottom-color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        
+        .card-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .critical-issues {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .issue-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .issue-title {
+            font-weight: 500;
+        }
+        
+        .issue-priority {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .high {
+            background-color: #feeeee;
+            color: var(--danger-color);
+        }
+        
+        .medium {
+            background-color: #fff8e6;
+            color: var(--warning-color);
+        }
+        
+        .low {
+            background-color: #e6f7f5;
+            color: var(--success-color);
+        }
+        
+        .issue-description {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .issue-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6c757d;
+        }
+        
+        .keywords-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .keywords-table th, .keywords-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .keywords-table th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        
+        .keywords-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .timeline {
+            margin-top: 20px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: -30px;
+            width: 2px;
+            background-color: #eee;
+        }
+        
+        .timeline-item:last-child:before {
+            display: none;
+        }
+        
+        .timeline-marker {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 500;
+            margin-right: 20px;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-date {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-description {
+            font-size: 14px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .metric-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        
+        .metric-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .metric-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .metric-positive {
+            color: var(--success-color);
+        }
+        
+        .metric-negative {
+            color: var(--danger-color);
+        }
+        
+        .budget-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .budget-total {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .budget-allocation {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .allocation-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .allocation-label {
+            font-weight: 500;
+        }
+        
+        .allocation-value {
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .progress-1 {
+            background-color: var(--primary-color);
+            width: 35%;
+        }
+        
+        .progress-2 {
+            background-color: var(--accent-color);
+            width: 25%;
+        }
+        
+        .progress-3 {
+            background-color: var(--success-color);
+            width: 20%;
+        }
+        
+        .progress-4 {
+            background-color: var(--warning-color);
+            width: 15%;
+        }
+        
+        .progress-5 {
+            background-color: var(--danger-color);
+            width: 5%;
+        }
+        
+        .checkmark {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* New Enhanced Data Visualization Styles for v1.01 */
+        .data-visualization {
+            margin-top: 20px;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .legend-label {
+            font-size: 13px;
+        }
+        
+        /* Responsive improvements for v1.01 */
+        @media (max-width: 768px) {
+            .budget-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-item {
+                flex-grow: 1;
+                text-align: center;
+            }
+        }
+
+        /* v1.01 SEO Design Lab Branding */
+        .seo-design-lab-branding {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .seo-design-lab-branding a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .seo-design-lab-branding a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/50" alt="Speedcom Logo">
+                <div class="logo-text">
+                    <h1>Speedcom Communications</h1>
+                    <p>SEO Strategy Dashboard</p>
+                </div>
+            </div>
+            <div class="version-info">v1.01</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard">
+            <div class="tabs">
+                <div class="tab-item active" data-tab="critical-issues">Critical Issues</div>
+                <div class="tab-item" data-tab="keywords">Keywords</div>
+                <div class="tab-item" data-tab="timeline">Timeline</div>
+                <div class="tab-item" data-tab="metrics">Metrics</div>
+                <div class="tab-item" data-tab="budget">Budget</div>
+            </div>
+            
+            <div class="tab-content active" id="critical-issues">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Critical SEO Issues</h2>
+                            <p class="card-subtitle">Prioritized list of issues requiring immediate attention</p>
+                        </div>
+                    </div>
+                    
+                    <div class="critical-issues">
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Optimize Mobile Loading Speed</div>
+                                <div class="issue-priority high">High</div>
+                            </div>
+                            <div class="issue-description">Mobile page load time exceeds 4 seconds. Optimize images and implement lazy loading for media content.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>+28% Performance</strong></div>
+                                <div>Est. Time: 3-5 days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Implement Structured Data</div>
+                                <div class="issue-priority high">High</div>
+                            </div>
+                            <div class="issue-description">Add JSON-LD schema markup for product pages to enhance visibility in search results.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>+15% CTR</strong></div>
+                                <div>Est. Time: 2-3 days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Fix Broken Internal Links</div>
+                                <div class="issue-priority medium">Medium</div>
+                            </div>
+                            <div class="issue-description">27 broken internal links found across service pages. Update or redirect these links.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>Improved Crawl Efficiency</strong></div>
+                                <div>Est. Time: 1-2 days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Optimize Meta Descriptions</div>
+                                <div class="issue-priority medium">Medium</div>
+                            </div>
+                            <div class="issue-description">34 pages have duplicate or missing meta descriptions. Create unique descriptions with targeted keywords.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>+8% CTR</strong></div>
+                                <div>Est. Time: 2-3 days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Resolve Duplicate Content</div>
+                                <div class="issue-priority low">Low</div>
+                            </div>
+                            <div class="issue-description">Duplicate content detected across 12 product variation pages. Implement canonical tags to consolidate ranking signals.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>Improved Ranking</strong></div>
+                                <div>Est. Time: 1 day</div>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-title">Add Alt Text to Images</div>
+                                <div class="issue-priority low">Low</div>
+                            </div>
+                            <div class="issue-description">56 images missing alt text. Add descriptive alt text with relevant keywords to improve accessibility and SEO.</div>
+                            <div class="issue-meta">
+                                <div>Impact: <strong>+5% Organic Traffic</strong></div>
+                                <div>Est. Time: 1 day</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="keywords">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Target Keywords</h2>
+                            <p class="card-subtitle">Prioritized keywords for content optimization</p>
+                        </div>
+                    </div>
+                    
+                    <table class="keywords-table">
+                        <thead>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Search Volume</th>
+                                <th>Current Position</th>
+                                <th>Competition</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>race car communications</td>
+                                <td>3,600/mo</td>
+                                <td>14</td>
+                                <td>Medium</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>racing radio systems</td>
+                                <td>2,900/mo</td>
+                                <td>8</td>
+                                <td>Medium</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>motorsport communication equipment</td>
+                                <td>1,800/mo</td>
+                                <td>5</td>
+                                <td>High</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>racing team headsets</td>
+                                <td>1,200/mo</td>
+                                <td>12</td>
+                                <td>Medium</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>pit crew communication</td>
+                                <td>950/mo</td>
+                                <td>18</td>
+                                <td>Low</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>rally team radio systems</td>
+                                <td>720/mo</td>
+                                <td>25</td>
+                                <td>Low</td>
+                                <td>Low</td>
+                            </tr>
+                            <tr>
+                                <td>nascar communications</td>
+                                <td>2,500/mo</td>
+                                <td>32</td>
+                                <td>High</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>formula 1 radio equipment</td>
+                                <td>3,100/mo</td>
+                                <td>42</td>
+                                <td>High</td>
+                                <td>Low</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- New in v1.01: Enhanced data visualization for keywords -->
+                    <div class="data-visualization">
+                        <div class="chart-container">
+                            <!-- This would be replaced with actual chart in production -->
+                            <div style="width: 100%; height: 100%; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; font-style: italic; color: #6c757d;">
+                                Interactive keyword trends chart (updated weekly)
+                            </div>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--primary-color);"></div>
+                                <div class="legend-label">Current Position</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--accent-color);"></div>
+                                <div class="legend-label">Search Volume</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--success-color);"></div>
+                                <div class="legend-label">Click-Through Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
